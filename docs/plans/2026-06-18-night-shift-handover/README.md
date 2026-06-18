@@ -6,7 +6,7 @@
 
 **Architecture:** A pure-function pipeline (ingest → translate → reconcile → flag → score → render) wrapped in a Fastify JSON API, with a plain React (Vite) view over the JSON. Reconciliation is stateless: `(full history, target date) → handover`. No hosted LLM — Chinese is translated by a local `transformers.js` model; all reasoning is deterministic so grounding is provable and prompt-injection cannot hijack logic.
 
-**Tech Stack:** Node 20, TypeScript, Fastify, `@xenova/transformers` (local zh→en MT), Vitest (TDD), Vite + React, Docker, Fly.io.
+**Tech Stack:** Node 20, TypeScript, Fastify, `@xenova/transformers` (local zh→en MT), Vitest (TDD), Vite + React, Docker, Render.
 
 **Design spec:** [`../2026-06-18-night-shift-handover-design.md`](../2026-06-18-night-shift-handover-design.md)
 **Master plan (single file):** [`../2026-06-18-night-shift-handover-implementation.md`](../2026-06-18-night-shift-handover-implementation.md)
@@ -29,7 +29,7 @@
 | 11 | Pipeline orchestrator + grounding invariants | [task-11-pipeline.md](task-11-pipeline.md) |
 | 12 | Fastify server + structured logging | [task-12-server.md](task-12-server.md) |
 | 13 | React view | [task-13-web.md](task-13-web.md) |
-| 14 | Containerize + Fly.io deploy | [task-14-deploy.md](task-14-deploy.md) |
+| 14 | Containerize + Render deploy | [task-14-deploy.md](task-14-deploy.md) |
 | 15 | Deliverable docs | [task-15-docs.md](task-15-docs.md) |
 
 ## File structure produced
@@ -39,7 +39,7 @@ package.json              # backend deps + scripts (ESM, run via tsx)
 tsconfig.json             # typecheck only (noEmit), Bundler resolution
 vitest.config.ts          # test config
 Dockerfile                # build web, run backend via tsx
-fly.toml                  # Fly.io app config
+render.yaml                  # Render app config
 data/                     # existing sample input (events.json, night-logs.md)
 src/
   types.ts                # all shared types

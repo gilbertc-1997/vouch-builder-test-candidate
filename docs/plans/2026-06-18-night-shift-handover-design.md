@@ -19,7 +19,7 @@ grounded in the source** and contradictions/missing data flagged, never papered 
 | Output | **JSON API is the grounding contract; React (Vite) renders it.** | `curl` hits JSON; humans read the page. UI kept deliberately plain (brief: visual polish not tested). |
 | Backend | **Node + TypeScript, Fastify**, `GET /handover`. | Light, good DX. |
 | Reconciliation model | **Stateless:** `GET /handover?date=YYYY-MM-DD`, recompute threads from full history each call; default to latest shift. | Every claim re-derived from source every time → easy to test & ground; lets graders generate any morning. No DB. |
-| Deploy | **Fly.io** (single container app, Fastify serves built React). | Container handles model weight + cold start; user has an account. |
+| Deploy | **Render** free tier (single Docker web service, Fastify serves built React). | Container handles model weight + cold start; free tier, no credit card required. |
 
 ## Architecture
 
@@ -40,7 +40,7 @@ Backend (Node + TS, Fastify)
 React (Vite) — fetches JSON, renders urgency groups + source tags
         │
         ▼
-Fly.io (single app, container)
+Render (single Docker web service)
 ```
 
 ## Data model

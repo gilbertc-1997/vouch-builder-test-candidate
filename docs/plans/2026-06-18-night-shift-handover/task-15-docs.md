@@ -14,7 +14,7 @@
 ## What I built / deliberately skipped
 Built: dual-format ingest, cross-night reconciliation, severity-ranked grounded handover,
 local (no-key) translation, deterministic trust-flagging (contradiction / missing data /
-prompt-injection), JSON API + plain React view, structured per-request logging, Fly deploy.
+prompt-injection), JSON API + plain React view, structured per-request logging, Render deploy.
 Skipped (and why): persisted per-night state (stateless recompute is simpler and provably
 grounded for a 2-hour slice); confidence scores; multi-hotel batch; auth.
 
@@ -63,7 +63,7 @@ confidence; smarter thread linking; eval set across more nights; auth + multi-ho
 
 Deployed:
 
-    curl -s "https://<your-app>.fly.dev/handover?date=2026-05-30"
+    curl -s "https://<your-app>.onrender.com/handover?date=2026-05-30"
 ```
 
 - [ ] **Step 3: Update the "no toolchain yet" section of `CLAUDE.md`** with the real commands

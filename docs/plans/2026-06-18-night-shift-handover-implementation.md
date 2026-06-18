@@ -6,7 +6,7 @@
 
 **Architecture:** A pure-function pipeline (ingest → translate → reconcile → flag → score → render) wrapped in a Fastify JSON API, with a plain React (Vite) view over the JSON. Reconciliation is stateless: `(full history, target date) → handover`. No hosted LLM — Chinese is translated by a local `transformers.js` model; all reasoning is deterministic so grounding is provable and prompt-injection cannot hijack logic.
 
-**Tech Stack:** Node 20, TypeScript, Fastify, `@xenova/transformers` (local zh→en MT), Vitest (TDD), Vite + React, Docker, Fly.io.
+**Tech Stack:** Node 20, TypeScript, Fastify, `@xenova/transformers` (local zh→en MT), Vitest (TDD), Vite + React, Docker, Render.
 
 **Design spec:** [`docs/plans/2026-06-18-night-shift-handover-design.md`](2026-06-18-night-shift-handover-design.md)
 
@@ -19,7 +19,7 @@ package.json              # backend deps + scripts (ESM, run via tsx)
 tsconfig.json             # typecheck only (noEmit), Bundler resolution
 vitest.config.ts          # test config
 Dockerfile                # build web, run backend via tsx
-fly.toml                  # Fly.io app config
+render.yaml                  # Render app config
 data/                     # existing sample input (events.json, night-logs.md)
 src/
   types.ts                # all shared types
@@ -1701,10 +1701,10 @@ git commit -m "feat: plain React view over the handover JSON"
 
 ---
 
-## Task 14: Containerize + Fly.io deploy
+## Task 14: Containerize + Render deploy
 
 **Files:**
-- Create: `Dockerfile`, `.dockerignore`, `fly.toml`
+- Create: `Dockerfile`, `.dockerignore`, `render.yaml`
 
 - [ ] **Step 1: Create `Dockerfile`**
 
@@ -1740,7 +1740,7 @@ web/dist
 *.log
 ```
 
-- [ ] **Step 3: Create `fly.toml`** (adjust `app` to a unique name at deploy time)
+- [ ] **Step 3: Create `render.yaml`** (adjust `app` to a unique name at deploy time)
 
 ```toml
 app = "vouch-handover"
@@ -1763,19 +1763,19 @@ primary_region = "sin"
 
 - [ ] **Step 4: Deploy**
 
-Run: `fly launch --no-deploy` (accept/adjust the generated app name; keep this `fly.toml`), then `fly deploy`
-Expected: build succeeds; `fly deploy` reports a healthy machine. Note the assigned URL (e.g. `https://vouch-handover.fly.dev`).
+Run: `Connect repo at render.com → New Web Service → select gilbertc-1997/vouch-builder-test-candidate → Docker → Free → Deploy.
+Expected: build succeeds; `` reports a healthy machine. Note the assigned URL (e.g. `https://vouch-handover.onrender.com`).
 
 - [ ] **Step 5: Verify the deployment**
 
-Run: `curl -s "https://<your-app>.fly.dev/handover?date=2026-05-30" | head -c 400`
+Run: `curl -s "https://<your-app>.onrender.com/handover?date=2026-05-30" | head -c 400`
 Expected: handover JSON. (First request may be slow while the model loads.)
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Dockerfile .dockerignore fly.toml
-git commit -m "chore: containerize and configure Fly.io deploy"
+git add Dockerfile .dockerignore render.yaml
+git commit -m "chore: containerize and configure Render deploy"
 ```
 
 ---
@@ -1794,7 +1794,7 @@ git commit -m "chore: containerize and configure Fly.io deploy"
 ## What I built / deliberately skipped
 Built: dual-format ingest, cross-night reconciliation, severity-ranked grounded handover,
 local (no-key) translation, deterministic trust-flagging (contradiction / missing data /
-prompt-injection), JSON API + plain React view, structured per-request logging, Fly deploy.
+prompt-injection), JSON API + plain React view, structured per-request logging, Render deploy.
 Skipped (and why): persisted per-night state (stateless recompute is simpler and provably
 grounded for a 2-hour slice); confidence scores; multi-hotel batch; auth.
 
@@ -1840,7 +1840,7 @@ confidence; smarter thread linking; eval set across more nights; auth + multi-ho
 
 Deployed:
 
-    curl -s "https://<your-app>.fly.dev/handover?date=2026-05-30"
+    curl -s "https://<your-app>.onrender.com/handover?date=2026-05-30"
 ```
 
 - [ ] **Step 3: Update the "no toolchain yet" section of `CLAUDE.md`** with the real commands
@@ -1878,7 +1878,7 @@ git commit -m "docs: DECISIONS.md, run instructions, real CLAUDE.md commands"
 - **Spec coverage:** ingest both formats (T3/T4) ✓ · reconcile across nights (T7) ✓ ·
   action-first severity grouping (T9/T10) ✓ · grounding + source refs + injection +
   contradictions + missing data (T8/T11) ✓ · local no-key translation (T6) ✓ · Fastify API +
-  view (T12/T13) ✓ · structured logging (T12) ✓ · Fly deploy (T14) ✓ · DECISIONS/docs (T15) ✓ ·
+  view (T12/T13) ✓ · structured logging (T12) ✓ · Render deploy (T14) ✓ · DECISIONS/docs (T15) ✓ ·
   severity model with reasons + fail-safe (T9) ✓.
 - **Placeholder scan:** only intentional human-authored blanks in `DECISIONS.md`
   ("AI helped / surprise") which require the real build session — all code steps are complete.

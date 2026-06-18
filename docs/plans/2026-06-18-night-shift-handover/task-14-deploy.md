@@ -1,9 +1,9 @@
-# Task 14: Containerize + Fly.io deploy
+# Task 14: Containerize + Render deploy
 
 ← [Task 13 — Web](task-13-web.md) · [Index](README.md) · Next: [Task 15 — Docs](task-15-docs.md)
 
 **Files:**
-- Create: `Dockerfile`, `.dockerignore`, `fly.toml`
+- Create: `Dockerfile`, `.dockerignore`, `render.yaml`
 
 - [ ] **Step 1: Create `Dockerfile`**
 
@@ -39,7 +39,7 @@ web/dist
 *.log
 ```
 
-- [ ] **Step 3: Create `fly.toml`** (adjust `app` to a unique name at deploy time)
+- [ ] **Step 3: Create `render.yaml`** (adjust `app` to a unique name at deploy time)
 
 ```toml
 app = "vouch-handover"
@@ -62,17 +62,17 @@ primary_region = "sin"
 
 - [ ] **Step 4: Deploy**
 
-Run: `fly launch --no-deploy` (accept/adjust the generated app name; keep this `fly.toml`), then `fly deploy`
-Expected: build succeeds; `fly deploy` reports a healthy machine. Note the assigned URL (e.g. `https://vouch-handover.fly.dev`).
+Go to render.com → New → Web Service → connect `gilbertc-1997/vouch-builder-test-candidate` → Runtime: Docker → Plan: Free → Create Web Service.
+Expected: build succeeds (~3 min). Note the assigned URL (e.g. `https://vouch-handover.onrender.com`).
 
 - [ ] **Step 5: Verify the deployment**
 
-Run: `curl -s "https://<your-app>.fly.dev/handover?date=2026-05-30" | head -c 400`
+Run: `curl -s "https://<your-app>.onrender.com/handover?date=2026-05-30" | head -c 400`
 Expected: handover JSON. (First request may be slow while the model loads.)
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Dockerfile .dockerignore fly.toml
-git commit -m "chore: containerize and configure Fly.io deploy"
+git add Dockerfile .dockerignore render.yaml
+git commit -m "chore: containerize and configure Render deploy"
 ```
