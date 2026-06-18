@@ -22,12 +22,12 @@ describe("ingestLog", () => {
     expect(events.every((e) => e.shiftDate === "2026-05-28")).toBe(true);
   });
   it("extracts a room when present and leaves it null otherwise", () => {
-    expect(events[0].room).toBe("112");
-    expect(events[2].room).toBeNull();
+    expect(events[0]!.room).toBe("112");
+    expect(events[2]!.room).toBeNull();
   });
   it("keeps original text verbatim and tags source", () => {
-    expect(events[1].text).toContain("我已经按 booking terms");
-    expect(events[1].source).toBe("log");
-    expect(events[1].sourceRef.source).toBe("log");
+    expect(events[1]!.text).toContain("我已经按 booking terms");
+    expect(events[1]!.source).toBe("log");
+    expect(events[1]!.sourceRef.source).toBe("log");
   });
 });

@@ -19,8 +19,8 @@ describe("translateEvents", () => {
   it("translates only CJK events and preserves the original", async () => {
     const fake = async (s: string) => `EN(${s})`;
     const out = await translateEvents([ev("保险箱打不开了"), ev("aircon broken")], fake);
-    expect(out[0].translatedText).toBe("EN(保险箱打不开了)");
-    expect(out[0].text).toBe("保险箱打不开了"); // original intact
-    expect(out[1].translatedText).toBeUndefined();
+    expect(out[0]!.translatedText).toBe("EN(保险箱打不开了)");
+    expect(out[0]!.text).toBe("保险箱打不开了"); // original intact
+    expect(out[1]!.translatedText).toBeUndefined();
   });
 });

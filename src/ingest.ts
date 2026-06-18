@@ -25,8 +25,8 @@ const MONTHS: Record<string, number> = {
 export function parseLogMorning(text: string, year: number): string | null {
   const m = text.match(/morning\s+\w+\s+(\d{1,2})\s+([A-Za-z]{3,})/i);
   if (!m) return null;
-  const day = Number.parseInt(m[1], 10);
-  const month = MONTHS[m[2].slice(0, 3).toLowerCase()];
+  const day = Number.parseInt(m[1]!, 10);
+  const month = MONTHS[m[2]!.slice(0, 3).toLowerCase()];
   if (!month) return null;
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
@@ -50,7 +50,7 @@ export function ingestLog(markdown: string, year: number): NormalizedEvent[] {
 
     const bullet = line.match(/^\s*-\s+(.*)$/);
     if (!bullet) return;
-    const body = bullet[1].trim();
+    const body = bullet[1]!.trim();
     if (!body) return;
 
     counter += 1;
@@ -62,7 +62,7 @@ export function ingestLog(markdown: string, year: number): NormalizedEvent[] {
       source: "log",
       timestamp: `${shiftDate}T07:00:00+08:00`,
       shiftDate,
-      room: roomMatch ? roomMatch[1] : null,
+      room: roomMatch ? roomMatch[1]! : null,
       guest: null,
       type: "log_note",
       text: body,

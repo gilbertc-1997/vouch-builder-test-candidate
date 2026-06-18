@@ -8,14 +8,32 @@ You are a senior Node.js/TypeScript engineer. Be direct, tradeoff-first, and ske
 
 ## Repository status
 
-This is a **take-home test scaffold**, not an existing application. As of now the repo contains only the brief and sample data — **there is no source code, `package.json`, build, or test setup yet.** You are expected to build the service from scratch.
+The service is built. Key inputs and docs:
 
 - [`BRIEF.md`](BRIEF.md) — the full task. Read it first; it is the source of truth.
-- [`README.md`](README.md) — short pointer to the brief and data.
+- [`DECISIONS.md`](DECISIONS.md) — what was built/skipped, reconciliation approach, grounding, surprises.
 - [`data/events.json`](data/events.json) — structured front-desk events (sample input).
 - [`data/night-logs.md`](data/night-logs.md) — one night logged as free text (sample input).
+- [`docs/plans/`](docs/plans/) — design spec and the task-by-task implementation plan.
 
-Because no toolchain exists yet, there are no build/lint/test commands to document. Once you scaffold the project (Node.js, framework of choice per the brief), add the real commands here.
+## Commands
+
+- `npm install` — backend deps
+- `npm test` — run the Vitest suite (`npm run test:watch` to watch)
+- `npx vitest run src/__tests__/<file>.test.ts` — run a single test file
+- `npm run dev` — API with reload on http://localhost:8080
+- `npm run typecheck` — type-only check
+- `npm run build` — build the React view into `web/dist`
+- `npm start` — run the server (serves API + built view)
+
+## Architecture
+
+Pure pipeline, composed in [`src/pipeline.ts`](src/pipeline.ts):
+`ingest (src/ingest.ts) → translate (src/lang.ts) → reconcile (src/reconcile.ts) →
+flag (src/flags.ts) → score (src/score.ts) → render (src/render.ts)`.
+Each stage is small and pure; [`src/server.ts`](src/server.ts) is the only side-effecting
+layer (Fastify, `GET`/`POST /handover`, structured logging). `SKIP_TRANSLATION=true` swaps
+the ONNX model for a passthrough (used on the constrained deploy host).
 
 ## Project Requirements
 
