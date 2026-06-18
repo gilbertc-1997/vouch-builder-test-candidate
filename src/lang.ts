@@ -23,8 +23,13 @@ export async function translateEvents(
 }
 
 // Lazy real translator (loaded only at runtime, never in unit tests).
+// Set SKIP_TRANSLATION=true to use a passthrough instead (avoids the ~25 s ONNX cold start
+// on constrained hosts like Render free tier where the proxy times out before the model loads).
 let _pipe: Promise<(text: string) => Promise<string>> | null = null;
 export function getTranslator(): Promise<(text: string) => Promise<string>> {
+  if (process.env.SKIP_TRANSLATION === "true") {
+    return Promise.resolve(async (text: string) => text);
+  }
   if (!_pipe) {
     _pipe = (async () => {
       const { pipeline } = await import("@xenova/transformers");

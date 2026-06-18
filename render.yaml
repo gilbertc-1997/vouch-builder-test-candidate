@@ -9,3 +9,5 @@ services:
         value: production
       - key: TRANSFORMERS_CACHE
         value: /app/.cache
+      - key: SKIP_TRANSLATION
+        value: "true"
