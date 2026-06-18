@@ -1,0 +1,18 @@
+:root { font-family: system-ui, sans-serif; line-height: 1.4; }
+main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+h1 { margin-bottom: 0.25rem; }
+.hotel { color: #444; }
+section { margin-top: 1.5rem; }
+ul { list-style: none; padding: 0; }
+.item { border-left: 4px solid #ccc; padding: 0.6rem 0.8rem; margin: 0.5rem 0; background: #fafafa; }
+.item.act_now { border-color: #d33; }
+.item.pending { border-color: #e6a700; }
+.item.fyi { border-color: #888; }
+.summary { font-weight: 600; }
+.meta { margin-top: 0.3rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.tag, .flag, .ref { font-size: 0.72rem; padding: 0.05rem 0.4rem; border-radius: 999px; }
+.tag { background: #e7eefc; }
+.flag { background: #fde2e1; }
+.ref { background: #eee; font-family: ui-monospace, monospace; }
+.why { font-size: 0.78rem; color: #666; margin-top: 0.25rem; }
+.error { color: #d33; }
